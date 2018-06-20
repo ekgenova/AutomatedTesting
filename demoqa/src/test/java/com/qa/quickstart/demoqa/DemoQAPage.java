@@ -36,7 +36,7 @@ public class DemoQAPage {
 		return accordion;
 	}
 	
-	@FindBy(id="ui-id-19")
+	@FindBy(id="ui-id-7")
 	private WebElement haskellAuto;
 	
 	@FindBy(id="tagss")
@@ -46,6 +46,15 @@ public class DemoQAPage {
 		return autoSearch;
 	}
 	
+	@FindBy(id="datepicker1")
+	private WebElement datepicker;
+	
+	public WebElement getDatepicker() {
+		return datepicker;
+	}
+	
+	@FindBy(css="#ui-datepicker-div > div > a.ui-datepicker-next.ui-corner-all > span")
+	private WebElement nextMonth;
 		
 	public void navigate(WebDriver driver, String url) {
 		driver.manage().window().maximize();
@@ -63,19 +72,37 @@ public class DemoQAPage {
 	}
 	
 	public void autocomplete(WebDriver driver) {
-		WebElement dynamic = (new WebDriverWait(driver,10)).until(ExpectedConditions.presenceOfElementLocated(By.id("tagss")));
+		
+//		WebElement dynamic = (new WebDriverWait(driver,10)).until(ExpectedConditions.presenceOfElementLocated(By.id("tagss")));
+		
+		WebElement newElement = driver.findElement(By.id("tagss"));
+		
+		
+		try{Thread.sleep(3000);}catch(Exception e) {};
+		
+		
 		Actions action = new Actions(driver);
-		action.moveToElement(dynamic).click().sendKeys("h").perform();
-//		List<WebElement> autoSuggest = new ArrayList<WebElement> (driver.findElements(By.className("ui-menu-item")));
-//		for (int i =0; i<autoSuggest.size(); i++)
-//		{
-//			if(autoSuggest.get(i).getText().equals("Haskell"))
-//			{
-//			action.moveToElement(autoSuggest.get(i)).click().perform(); 
-//			}
-//		}
-		//System.out.println("length of autocorrect list is "+autoSuggest.size());
 		
+		action.moveToElement(newElement).click().sendKeys("h").perform();
 		
+		action.moveToElement(haskellAuto).click().perform();
+		
+		ArrayList<WebElement> autoSuggest = new ArrayList<WebElement> (driver.findElements(By.className("ui-menu-item")));
+		for (int i =0; i<autoSuggest.size(); i++)
+		{
+			if(autoSuggest.get(i).getText().equals("Haskell"))
+			{
+			action.moveToElement(autoSuggest.get(i)).click().perform(); 
+			}
+		}
+		System.out.println("length of autocorrect list is "+autoSuggest.size());
+		
+	}
+	
+	public void datePick(WebDriver driver) {
+		WebElement dynamic = (new WebDriverWait(driver,10)).until(ExpectedConditions.presenceOfElementLocated(By.id("datepicker1")));
+		Actions action = new Actions(driver);
+		action.moveToElement(dynamic).click().perform();
+		action.click(nextMonth);
 	}
 }

@@ -27,6 +27,7 @@ public class actions {
 	private String selectableURL = "http://demoqa.com/selectable/";
 	private String accordionURL = "http://demoqa.com/accordion/";
 	private String autocompleteURL = "http://demoqa.com/autocomplete/";
+	private String datepickerURL = "http://demoqa.com/datepicker/";
 
 	@BeforeClass
 	public static void set() {
@@ -98,10 +99,12 @@ public class actions {
 	}
 	
 	@Test
-	@Ignore
+	
 	public void autocompleteTest() {
 		page.navigate(driver, autocompleteURL);
 		page.autocomplete(driver);
+		
+		
 //		ArrayList<WebElement> autoSuggest = new ArrayList<WebElement> (driver.findElements(By.className("ui-menu-item")));
 //		for (int i =0;i<autoSuggest.size();i++)
 //		{
@@ -110,8 +113,15 @@ public class actions {
 //			autoSuggest.get(i).click(); 
 //			}
 //		}
-		System.out.println("length of autocorrect list is "+autoSuggest.size());
+		//System.out.println("length of autocorrect list is "+autoSuggest.size());
 		//assertEquals("Haskell", page.getAutoSearch().getText());
+	}
+	
+	@Test
+	@Ignore
+	public void datepickerTest() {
+		page.navigate(driver, datepickerURL);
+		page.datePick(driver);
 	}
 	
 //	@After
