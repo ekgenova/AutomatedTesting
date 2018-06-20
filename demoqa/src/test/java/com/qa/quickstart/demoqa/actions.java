@@ -2,10 +2,13 @@ package com.qa.quickstart.demoqa;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 
 import com.relevantcodes.extentreports.ExtentReports;
@@ -17,10 +20,13 @@ public class actions {
 
 	static ExtentReports extent;
 	ChromeDriver driver;
+	DemoQAPage page = PageFactory.initElements(driver, DemoQAPage.class);
 	
 	//URLS
 	private String droppableURL = "http://demoqa.com/droppable/";
 	private String selectableURL = "http://demoqa.com/selectable/";
+	private String accordionURL = "http://demoqa.com/accordion/";
+	private String autocompleteURL = "http://demoqa.com/autocomplete/";
 
 	@BeforeClass
 	public static void set() {
@@ -34,8 +40,8 @@ public class actions {
 	}
 	
 	@Test
+	@Ignore
 	public void droppableTest() {
-		DemoQAPage page = PageFactory.initElements(driver, DemoQAPage.class);
 		page.navigate(driver, droppableURL);
 		page.drop(driver);
 		assertEquals("Dropped!", page.getDroppable().getText());
@@ -54,10 +60,10 @@ public class actions {
 	}
 	
 	@Test
+	@Ignore
 	public void selectableTest() {
-		DemoQAPage page = PageFactory.initElements(driver, DemoQAPage.class);
 		page.navigate(driver, selectableURL);
-		page.select(driver);
+		page.select(driver, page.getSelectable());
 		assertEquals(page.getSelectable().isSelected(), driver.findElementById("selectable").isSelected());
 		
 		ExtentTest test2 = extent.startTest("Selectable item");
@@ -72,11 +78,47 @@ public class actions {
 		}
 	}
 	
-	@After
-	public void close() {
-		driver.quit();
-		extent.flush();
+	@Test
+	@Ignore
+	public void accordionTest() {
+		page.navigate(driver, accordionURL);
+		page.select(driver, page.getAccordion());
+		assertEquals(page.getAccordion().isSelected(), driver.findElementById("accordion").isSelected());
+		
+		ExtentTest test3 = extent.startTest("Accordion expansion");
+		try {
+			test3.log(LogStatus.PASS, "Test passed successfully!");
+		} catch (AssertionError e) {
+			test3.log(LogStatus.FAIL, "Test failed");
+		} finally {
+			test3.log(LogStatus.INFO, "Automated: Expanding an accordion item.");
+			test3.log(LogStatus.INFO, "Current URL: " + driver.getCurrentUrl());
+			extent.endTest(test3);
+		}
 	}
+	
+	@Test
+	@Ignore
+	public void autocompleteTest() {
+		page.navigate(driver, autocompleteURL);
+		page.autocomplete(driver);
+//		ArrayList<WebElement> autoSuggest = new ArrayList<WebElement> (driver.findElements(By.className("ui-menu-item")));
+//		for (int i =0;i<autoSuggest.size();i++)
+//		{
+//			if(autoSuggest.get(i).getText().equals("Haskell"))
+//			{
+//			autoSuggest.get(i).click(); 
+//			}
+//		}
+		System.out.println("length of autocorrect list is "+autoSuggest.size());
+		//assertEquals("Haskell", page.getAutoSearch().getText());
+	}
+	
+//	@After
+//	public void close() {
+//		driver.quit();
+//		extent.flush();
+//	}
 	
 	
 }
